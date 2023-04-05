@@ -1,0 +1,16 @@
+<resources>
+
+    <string name="app_name">Notification Hub</string>
+    <string name="service_label">Notification Hub</string>
+
+    <!-- Strings related to the Alert Dialog -->
+    <string name="notification_listener_service">"Notification Listener Service"</string>
+    <string name="notification_listener_service_explanation">"Application require permission to enable the Notification Listener Service to work %s, Enable it now?"</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="description2">1. Find the %s in startup manager. \n2. Turn on the switch as in above image.</string>
+    <string name="description1">Application require permission to save notifications.</string>
+
+</resources>
