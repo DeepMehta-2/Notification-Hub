@@ -12,6 +12,7 @@ import com.centennial.notification.hub.R;
 import com.centennial.notification.hub.activity.Is_SaveNotification;
 import com.centennial.notification.hub.model.AppCategory;
 import com.centennial.notification.hub.model.InstalledAppDataClass;
+import com.centennial.notification.hub.other.MySQLiteHelper;
 
 import java.util.ArrayList;
 

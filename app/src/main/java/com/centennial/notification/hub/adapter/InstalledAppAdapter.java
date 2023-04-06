@@ -13,6 +13,7 @@ import com.centennial.notification.hub.R;
 
 import com.centennial.notification.hub.model.GroupDataClass;
 import com.centennial.notification.hub.model.InstalledAppDataClass;
+import com.centennial.notification.hub.other.MySQLiteHelper;
 
 import java.util.ArrayList;
 

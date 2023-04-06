@@ -23,9 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private Toolbar toolbar;
     ArrayList<String> navigation_items;
-    private ListView lv_drawer;
-    private int[] nav_image = {R.drawable.img_home, R.drawable.img_settings, R.drawable.img_rate,
-            R.drawable.img_share, R.drawable.img_more_apps, R.drawable.img_exit};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         navigation_items.add("Share");
         navigation_items.add("More Apps");
         navigation_items.add("Exit");
-
-        lv_drawer = (ListView) findViewById(R.id.lv_drawer);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabview);
