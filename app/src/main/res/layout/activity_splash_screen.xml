@@ -3,8 +3,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_img"
+    android:background="@drawable/splash_screen"
     tools:context="com.centennial.notification.hub.activity.SplashScreen">
+
+    <ImageView
+        android:id="@+id/icon_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="200dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/app_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notification Hub"
+        android:textColor="#ffffff"
+        android:textSize="28dp"
+        android:layout_below="@id/icon_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/app_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get organized with all notifications in one app"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:fontFamily="cursive"
+        android:layout_below="@id/app_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
 
     <ProgressBar
         style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
@@ -14,6 +46,6 @@
         android:layout_centerInParent="true"
         android:layout_marginBottom="100dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/colorAccent" />
+        android:indeterminateTint="#2988EC" />
 
 </RelativeLayout>

@@ -9,8 +9,46 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/permission_activity_bg" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash_screen" />
+
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/permission" />
+
+    <TextView
+        android:id="@+id/description_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notification_listener_service"
+        android:textColor="#FFAA33"
+        android:textSize="28dp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description_title"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="322dp"
+            android:layout_height="wrap_content"
+            android:text="@string/notification_listener_service_explanation"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/permission_btn"
