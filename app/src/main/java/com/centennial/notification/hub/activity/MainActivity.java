@@ -1,8 +1,12 @@
 package com.centennial.notification.hub.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -19,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<GroupDataClass> title_arrayList;
     public static ViewPagerAdapter pagerAdapter;
-
     private MySQLiteHelper helper;
     private Toolbar toolbar;
 
@@ -65,5 +68,21 @@ public class MainActivity extends AppCompatActivity {
                     MainFragmentLayout.mActionMode.finish();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.setting_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.setting) {
+            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 }

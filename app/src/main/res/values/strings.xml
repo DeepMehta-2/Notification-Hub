@@ -6,5 +6,6 @@
     <!-- Strings related to the Alert Dialog -->
     <string name="notification_listener_service">"Notification Listener Service"</string>
     <string name="notification_listener_service_explanation">"Application require permission to enable the Notification Listener Service to work %s, Enable it now?"</string>
+    <string name="settings">Settings</string>
 
 </resources>
