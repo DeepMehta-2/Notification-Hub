@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.centennial.notification.hub.other.MySQLiteHelper;
 import com.centennial.notification.hub.R;
 
 import com.centennial.notification.hub.model.GroupDataClass;
 import com.centennial.notification.hub.model.InstalledAppDataClass;
-import com.centennial.notification.hub.other.MySQLiteHelper;
 
 import java.util.ArrayList;
 
@@ -30,13 +30,13 @@ public class InstalledAppAdapter extends RecyclerView.Adapter<InstalledAppAdapte
     }
 
     @Override
-    public InstalledAppAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(c).inflate(R.layout.installed_app_row, parent, false);
         return new MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(InstalledAppAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
 
         holder.appName_Switch.setText(list.get(position).getAppName());
         holder.appIcon.setImageDrawable(list.get(position).getAppIcon());

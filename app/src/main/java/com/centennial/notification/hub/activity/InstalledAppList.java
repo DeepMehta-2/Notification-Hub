@@ -10,7 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.centennial.notification.hub.adapter.InstalledAppAdapter;
+
 import com.centennial.notification.hub.R;
+import com.centennial.notification.hub.Utils.GetInstalledAppList;
+import com.centennial.notification.hub.model.InstalledAppDataClass;
+
+import java.util.ArrayList;
 
 public class InstalledAppList extends AppCompatActivity {
 
@@ -46,6 +52,8 @@ public class InstalledAppList extends AppCompatActivity {
     private class GetData extends AsyncTask<String, String, String> {
 
         ProgressDialog pd = null;
+        ArrayList<InstalledAppDataClass> arrayList;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -58,6 +66,7 @@ public class InstalledAppList extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
+            arrayList = GetInstalledAppList.getAppList(InstalledAppList.this);
 
             return null;
         }
@@ -68,6 +77,11 @@ public class InstalledAppList extends AppCompatActivity {
 
             if (pd != null && pd.isShowing()) {
                 pd.dismiss();
+            }
+
+            if (arrayList != null && arrayList.size() > 0) {
+                InstalledAppAdapter adapter = new InstalledAppAdapter(InstalledAppList.this, arrayList, groupname);
+                recyclerView.setAdapter(adapter);
             }
 
         }

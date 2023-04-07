@@ -1,28 +1,27 @@
 package com.centennial.notification.hub.activity;
 
-import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Bundle;
-import android.widget.ListView;
-
-import com.centennial.notification.hub.adapter.ViewPagerAdapter;
-import com.google.android.material.tabs.TabLayout;
-
 import com.centennial.notification.hub.R;
+import com.centennial.notification.hub.adapter.ViewPagerAdapter;
+import com.centennial.notification.hub.model.GroupDataClass;
+import com.centennial.notification.hub.other.MySQLiteHelper;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static ArrayList<GroupDataClass> title_arrayList;
     public static ViewPagerAdapter pagerAdapter;
 
-    private SharedPreferences preferences;
+    private MySQLiteHelper helper;
     private Toolbar toolbar;
-    ArrayList<String> navigation_items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +30,25 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        preferences = getSharedPreferences("My_PREF", MODE_PRIVATE);
+        ViewPager viewPager = findViewById(R.id.viewpager);
+        TabLayout tabLayout = findViewById(R.id.tabview);
 
-        Boolean isPermission = preferences.getBoolean("isPermission", false);
-        if (!isPermission) {
+        helper = new MySQLiteHelper(this);
+
+        // Get All group name and show as tab view
+        title_arrayList = helper.showGroupName();
+        if (title_arrayList != null && title_arrayList.size() > 0) {
+            viewPager.setOffscreenPageLimit(title_arrayList.size());
+            pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            for (GroupDataClass dataClass : title_arrayList) {
+                MainFragmentLayout mainFragment = new MainFragmentLayout(dataClass.getGroup_Name());
+                pagerAdapter.addFrag(mainFragment, dataClass.getGroup_Name());
+            }
+            viewPager.setAdapter(pagerAdapter);
+        } else {
+            Toast.makeText(this, "No Groups Available", Toast.LENGTH_LONG).show();
         }
-
-        navigation_items = new ArrayList<>();
-        //adding menu items for naviations
-        navigation_items.add("Home");
-        navigation_items.add("Settings");
-        navigation_items.add("Rate");
-        navigation_items.add("Share");
-        navigation_items.add("More Apps");
-        navigation_items.add("Exit");
-
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabview);
-
         tabLayout.setupWithViewPager(viewPager);
-
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -68,5 +66,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }

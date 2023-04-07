@@ -8,11 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
 
+import com.centennial.notification.hub.other.MySQLiteHelper;
 import com.centennial.notification.hub.R;
+import com.centennial.notification.hub.Utils.Common;
 import com.centennial.notification.hub.activity.Is_SaveNotification;
 import com.centennial.notification.hub.model.AppCategory;
 import com.centennial.notification.hub.model.InstalledAppDataClass;
-import com.centennial.notification.hub.other.MySQLiteHelper;
 
 import java.util.ArrayList;
 
@@ -27,13 +28,13 @@ public class Is_SaveNotificationAdapter extends RecyclerView.Adapter<Is_SaveNoti
     }
 
     @Override
-    public Is_SaveNotificationAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(c).inflate(R.layout.installed_app_row, parent, false);
         return new MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(Is_SaveNotificationAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
 
         holder.appName_Switch.setText(list.get(position).getAppName());
         holder.appIcon.setImageDrawable(list.get(position).getAppIcon());
@@ -82,6 +83,9 @@ public class Is_SaveNotificationAdapter extends RecyclerView.Adapter<Is_SaveNoti
                         isSavedValue = 0;
                         Is_SaveNotification.SavedCount -= 1;
                     }
+
+                    MySQLiteHelper sqLiteHelper = new MySQLiteHelper(c);
+                    String.valueOf(sqLiteHelper.UpdateIsSave(list.get(getAdapterPosition()).getPackageName(), isSavedValue));
 
                     Is_SaveNotification.savedCountTextView.setText("Apps saved " + Is_SaveNotification.SavedCount + "/" + getItemCount());
                 }

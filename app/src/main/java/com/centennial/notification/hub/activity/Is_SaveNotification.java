@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 
 import com.centennial.notification.hub.adapter.Is_SaveNotificationAdapter;
+import com.centennial.notification.hub.other.MySQLiteHelper;
 import com.centennial.notification.hub.R;
+import com.centennial.notification.hub.Utils.Common;
 import com.centennial.notification.hub.Utils.GetInstalledAppList;
 import com.centennial.notification.hub.model.AppCategory;
 import com.centennial.notification.hub.model.InstalledAppDataClass;
@@ -42,10 +44,77 @@ public class Is_SaveNotification extends AppCompatActivity {
         dividerItemDecoration.setDrawable(this.getResources().getDrawable(R.drawable.divider));
         recyclerView.addItemDecoration(dividerItemDecoration);
 
+        final SwipeRefreshLayout swiperefresh = findViewById(R.id.swiperefresh);
+        swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new GetData().execute();
+                swiperefresh.setRefreshing(false);
+            }
+        });
+
+        new GetData().execute();
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    private class GetData extends AsyncTask<String, String, String> {
+
+        ProgressDialog pd = null;
+        ArrayList<InstalledAppDataClass> arrayList;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(Is_SaveNotification.this, R.style.CustomProgressBar);
+            pd.setProgressStyle(android.R.style.Widget_ProgressBar_Large);
+            pd.setCancelable(false);
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            SavedCount = 0;
+
+            arrayList = GetInstalledAppList.getAppList(Is_SaveNotification.this);
+
+            if (arrayList != null && arrayList.size() > 0) {
+
+                for (InstalledAppDataClass dataClass : arrayList) {
+
+                    MySQLiteHelper helper = new MySQLiteHelper(Is_SaveNotification.this);
+                    int i = helper.CheckIsSaved(dataClass.getPackageName());
+                    if (i == 1) {
+                        SavedCount += 1;
+                    } else if (i == 2) {
+                        AppCategory category = new AppCategory();
+                        category.setAppName(dataClass.getAppName());
+                        category.setAppPackageName(dataClass.getPackageName());
+                        category.setAppImg(Common.getBytes(dataClass.getAppIcon()));
+                        Long id = helper.addCategory(category);
+                        SavedCount += 1;
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (pd != null && pd.isShowing()) {
+                pd.dismiss();
+            }
+
+            savedCountTextView.setText("Apps saved " + SavedCount + "/" + arrayList.size());
+
+            Is_SaveNotificationAdapter adapter = new Is_SaveNotificationAdapter(Is_SaveNotification.this, arrayList);
+            recyclerView.setAdapter(adapter);
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

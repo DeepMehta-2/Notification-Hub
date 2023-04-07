@@ -19,7 +19,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
-    private static final String DATABASE_NAME = "NotificationHub";
+    private static final String DATABASE_NAME = "MyNotify";
 
     // table name
     private static final String TABLE_APP_CATEGORY = "app_category";
@@ -69,7 +69,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 + KEY_APP_PKGNAME + " TEXT," + KEY_APP_IMG + " BLOB, " + KEY_APP_IS_SAVE + " INTEGER NOT NULL DEFAULT 1, "
                 + KEY_CATE_DATE + " LONG NOT NULL DEFAULT 0 )";
 
-        String SAVE_NOTIFICATION_TABLE = "CREATE TABLE " + TABLE_SAVE_NOTIFICATION +
+        String SAVE_NOTIFICATIO_TABLE = "CREATE TABLE " + TABLE_SAVE_NOTIFICATION +
                 "( " + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_CATE_ID + " INTEGER," + KEY_TITLE + " TEXT,"
                 + KEY_MESSAGE + " TEXT," + KEY_BIG_TEXT + " TEXT," + KEY_TICKER_TEXT + " TEXT,"
                 + KEY_BIG_IMAGE + " BLOB," + KEY_SMALL_ICON + " BLOB," + KEY_LARGE_ICON + " BLOB," + KEY_DATE + " LONG )";
@@ -81,7 +81,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // create table
         db.execSQL(CREATE_CATEGORY_TABLE);
-        db.execSQL(SAVE_NOTIFICATION_TABLE);
+        db.execSQL(SAVE_NOTIFICATIO_TABLE);
         db.execSQL(CREATE_GROUP);
     }
 
@@ -97,7 +97,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    //---------------------------------------------------------------------//
+    //---------------------------------------------------------------------
     public long addCategory(AppCategory category) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -109,7 +109,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 //        values.put(KEY_APP_IS_SAVE, 1); By Default 1 , No need to give value
 
         long id = db.insert(TABLE_APP_CATEGORY, // table
-                null,
+                null, //nullColumnHack
                 values); // key/value -> keys = column names/ values = column values
 
         db.close();
@@ -315,6 +315,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             // 1. build the query
 //        String query = ("SELECT * FROM " + TABLE_APP_CATEGORY + " ORDER BY " + KEY_CATEGORY_ID + " DESC");
 
+//        String q = ("SELECT c.* FROM " + TABLE_APP_CATEGORY + " c, " + TABLE_SAVE_NOTIFICATION +
+//                " n WHERE n." + KEY_CATE_ID + " = c." + KEY_CATEGORY_ID);
+
             // 2. get reference to writable DB
             Cursor cursor = db.rawQuery(q, null);
 
@@ -369,6 +372,30 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    // Deleting multiple notification
+    public void deleteMultipleNotification(ArrayList<SaveNotificationData> list) {
+
+        String ids;
+        StringBuffer buffer = new StringBuffer("(");
+        for (int i = 0; i < list.size(); i++) {
+            if (i != 0) {
+                buffer.append(", ");
+            }
+            String deleteId = String.valueOf(list.get(i).getId());
+            buffer.append(deleteId);
+        }
+        ids = buffer.append(")").toString();
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_SAVE_NOTIFICATION, KEY_ID + " IN " + ids, null);
+
+        // 3. close
+        db.close();
+    }
+
     // Deleting category
     public void deleteCategory(int id) {
 
@@ -382,6 +409,33 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.delete(TABLE_APP_CATEGORY,
                 KEY_CATEGORY_ID + " = ?",
                 new String[]{String.valueOf(id)});
+        // 3. close
+        db.close();
+    }
+
+    // Deleting multiple category
+    public void deleteMultipleCategory(ArrayList<AppCategory> list) {
+
+        String ids;
+        StringBuffer buffer = new StringBuffer("(");
+        for (int i = 0; i < list.size(); i++) {
+            if (i != 0) {
+                buffer.append(", ");
+            }
+            String deleteId = String.valueOf(list.get(i).getCategoryID());
+            buffer.append(deleteId);
+        }
+
+        ids = buffer.append(")").toString();
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_SAVE_NOTIFICATION, KEY_CATE_ID + " IN " + ids, null);
+
+        db.delete(TABLE_APP_CATEGORY, KEY_CATEGORY_ID + " IN " + ids, null);
+
         // 3. close
         db.close();
     }
@@ -426,6 +480,167 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             db.close();
             return true;
         }
+    }
+
+    // Get group names.
+    public ArrayList<GroupDataClass> showGroupName() {
+
+        ArrayList<GroupDataClass> arrayList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor =
+                db.query(true, TABLE_GROUP, // a. table
+                        new String[]{KEY_GROUP_ID, KEY_GROUP_NAME, KEY_GROUP_APP_NAME, KEY_GROUP_PKG_NAME, KEY_IS_IN_GROUP}, // b. column names
+                        null, // c. selections
+                        null, // d. selections args
+                        KEY_GROUP_NAME, // e. group by
+                        null, // f. having
+                        KEY_GROUP_NAME, // g. order by
+                        null); // h. limit
+
+        if (cursor.moveToFirst()) {
+            do {
+                GroupDataClass data = new GroupDataClass();
+                data.setGroup_ID(Integer.parseInt(cursor.getString(0)));
+                data.setGroup_Name(cursor.getString(1));
+                data.setGroup_App_Name(cursor.getString(2));
+                data.setGroup_Pkg_Name(cursor.getString(3));
+                data.setIs_inGroup(cursor.getInt(4));
+
+                // Add category to categories.
+                arrayList.add(data);
+
+            } while (cursor.moveToNext());
+        } else {
+//            Log.e("Empty", "null");
+        }
+        cursor.close();
+        return arrayList;
+    }
+
+
+    public boolean updateAppGroupStatus(GroupDataClass dataClass) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_IS_IN_GROUP, dataClass.getIs_inGroup());
+
+        boolean b = db.update(TABLE_GROUP, values,
+                KEY_GROUP_NAME + " = ? and " + KEY_GROUP_PKG_NAME + " = ? ",
+                new String[]{dataClass.getGroup_Name(), dataClass.getGroup_Pkg_Name()}) > 0;
+
+        return b;
+    }
+
+    public boolean checkGrouplist(String group_name, String package_name) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor =
+                db.query(TABLE_GROUP, // a. table
+                        new String[]{KEY_GROUP_ID, KEY_GROUP_NAME, KEY_GROUP_APP_NAME, KEY_GROUP_PKG_NAME, KEY_IS_IN_GROUP}, // b. column names
+                        KEY_GROUP_NAME + " = ? AND " + KEY_GROUP_PKG_NAME + "= ?", // c. selections
+                        new String[]{group_name, package_name}, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        if (cursor.moveToFirst()) {
+
+            if (cursor.getInt(4) == 1) {
+                cursor.close();
+                db.close();
+                return true;
+            } else {
+                cursor.close();
+
+                return false;
+            }
+        } else {
+            cursor.close();
+            return false;
+        }
+    }
+
+    // Remove Group
+    public boolean RemoveGroup(String groupName) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        boolean b = db.delete(TABLE_GROUP,
+                KEY_GROUP_NAME + " = ? ",
+                new String[]{groupName}) > 0;
+
+        db.close();
+        return b;
+    }
+
+    // Update Group Name
+    public boolean UpdateGroupName(String OldName, String NewName) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues args = new ContentValues();
+        args.put(KEY_GROUP_NAME, NewName);
+
+        boolean b = db.update(TABLE_GROUP, args, KEY_GROUP_NAME + " = ? ", new String[]{OldName}) > 0;
+        db.close();
+        return b;
+    }
+
+    //------------------  About Saving Status Of Notification  ----------------------//
+    public int CheckIsSaved(String PkgName) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =
+                db.query(TABLE_APP_CATEGORY, // a. table
+                        new String[]{KEY_APP_PKGNAME, KEY_APP_IS_SAVE}, // b. column names
+                        KEY_APP_PKGNAME + " = ?", // c. selections
+                        new String[]{PkgName}, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        if (cursor.moveToFirst()) {
+            int i = cursor.getInt(1);
+            cursor.close();
+            db.close();
+            return i;
+        } else {
+            cursor.close();
+            db.close();
+            return 2;
+        }
+    }
+
+    public boolean UpdateIsSave(String Pkg_Name, int is_save) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues args = new ContentValues();
+        args.put(KEY_APP_IS_SAVE, is_save);
+
+        boolean b = db.update(TABLE_APP_CATEGORY, args, KEY_APP_PKGNAME + " = ? ", new String[]{Pkg_Name}) > 0;
+        db.close();
+        return b;
+    }
+
+    // Get Count of Notification Data
+    public long getNotificationCount(int category_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        long count = DatabaseUtils.queryNumEntries(db, TABLE_SAVE_NOTIFICATION, KEY_CATE_ID + " = ? ", new String[]{String.valueOf(category_id)});
+        db.close();
+        return count;
+    }
+
+    //Delete data on regular basis
+    public int DeleteData(long TimeInMillis) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int affectedRow = db.delete(TABLE_SAVE_NOTIFICATION, KEY_DATE + " <= " + TimeInMillis, null);
+        db.close();
+        return affectedRow;
     }
 
 }
