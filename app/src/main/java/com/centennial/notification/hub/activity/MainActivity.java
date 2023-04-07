@@ -1,6 +1,9 @@
 package com.centennial.notification.hub.activity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.centennial.notification.hub.R;
@@ -82,7 +88,32 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
             return true;
+        } else if (item.getItemId() == R.id.testingNotification) {
+            sendNotification("Testing Notification","This is a demo notification for testing purpose");
         }
         return super.onContextItemSelected(item);
+    }
+
+    private void sendNotification(String title, String message) {
+        String channelID = "MyNotificationChannel";
+        NotificationChannel channel = new NotificationChannel(channelID, "My Notification Channel", NotificationManager.IMPORTANCE_DEFAULT);
+
+        // Set the channel description and enable lights
+        channel.setDescription("Channel Description");
+        channel.enableLights(true);
+
+        // Get the NotificationManager and create the channel
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+        // Create a notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "MyNotificationChannel")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        // Show the notification
+        notificationManager.notify(0, builder.build());
     }
 }

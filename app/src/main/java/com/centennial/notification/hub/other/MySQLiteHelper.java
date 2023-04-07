@@ -19,7 +19,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
-    private static final String DATABASE_NAME = "MyNotify";
+    private static final String DATABASE_NAME = "MyNotificationHubDB";
 
     // table name
     private static final String TABLE_APP_CATEGORY = "app_category";

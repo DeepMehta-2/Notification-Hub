@@ -7,4 +7,10 @@
         android:title="@string/settings"
         app:iconTint="@color/white"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/testingNotification"
+        android:icon="@drawable/ic_send"
+        android:title="@string/testingNotification"
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
 </menu>

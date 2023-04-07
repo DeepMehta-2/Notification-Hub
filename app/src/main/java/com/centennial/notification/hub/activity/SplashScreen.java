@@ -7,18 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.centennial.notification.hub.other.MyBroadcastReceiver;
-import com.centennial.notification.hub.other.MySQLiteHelper;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.centennial.notification.hub.R;
 import com.centennial.notification.hub.Utils.GetInstalledAppList;
 import com.centennial.notification.hub.model.GroupDataClass;
 import com.centennial.notification.hub.model.InstalledAppDataClass;
+import com.centennial.notification.hub.other.MyBroadcastReceiver;
+import com.centennial.notification.hub.other.MySQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,11 +28,9 @@ public class SplashScreen extends AppCompatActivity {
 
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
-    int delaytime = 3000;
     SharedPreferences preferences;
     private MySQLiteHelper helper;
     private ArrayList<InstalledAppDataClass> arrayList;
-    private int isFbLoad = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +58,15 @@ public class SplashScreen extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            // Get installed app list
+// Get installed app list
             arrayList = GetInstalledAppList.getAppList(SplashScreen.this);
 
-            Boolean isFirstLaunch = preferences.getBoolean("isFirstLaunch", false);
+            boolean isAppLaunchedFirstTime = preferences.getBoolean("isAppLaunchedFirstTime", true);
             if (arrayList != null && arrayList.size() > 0) {
-                if (isFirstLaunch) {
-                    // Create all groups (This will run every time when app is open after first launch)
-                    All();
-                    delaytime = 3000;
-                } else {
-                    // Create default groups (This will call only on first launch)
+                if (isAppLaunchedFirstTime) {
                     CreateDefaultGroups();
-                    delaytime = 7500;
                 }
             }
-
             return null;
         }
 
@@ -86,7 +78,7 @@ public class SplashScreen extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    // If the user did not turn the notification listener service on we prompt him to do so
+// If the user did not turn the notification listener service on we prompt him to do so
                     if (!isNotificationServiceEnabled()) {
                         Intent intent = new Intent(SplashScreen.this, PermissionActivity.class);
                         startActivity(intent);
@@ -98,7 +90,7 @@ public class SplashScreen extends AppCompatActivity {
                     }
 
                 }
-            }, delaytime);
+            }, 3000);
 
         }
 
@@ -134,7 +126,7 @@ public class SplashScreen extends AppCompatActivity {
         Finance();
 
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isFirstLaunch", true);
+        editor.putBoolean("isAppLaunchedFirstTime", false);
         editor.putString("Delete Time Interval", "7 Days");
         editor.commit();
     }
