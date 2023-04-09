@@ -47,14 +47,17 @@ public class SaveNotificationActivity extends AppCompatActivity {
     ArrayList<SaveNotificationData> multiselect_list = new ArrayList<>();
     public static boolean isMultiSelect = false;
 
+    String appName;
+    byte[] appIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_notification);
 
         categoryID = getIntent().getExtras().getInt("categoryID");
-        String appName = getIntent().getExtras().getString("appName", getResources().getString(R.string.app_name));
-        byte[] appIcon = getIntent().getExtras().getByteArray("appIcon");
+        appName = getIntent().getExtras().getString("appName", getResources().getString(R.string.app_name));
+        appIcon = getIntent().getExtras().getByteArray("appIcon");
 
         setTitle("   " + appName);
         if (appIcon != null) {
@@ -160,7 +163,7 @@ public class SaveNotificationActivity extends AppCompatActivity {
                 NoData.setVisibility(View.GONE);
                 notification_recycler.setVisibility(View.VISIBLE);
                 if (adapter == null) {
-                    adapter = new SaveNotificationAdapter(SaveNotificationActivity.this, arr, multiselect_list);
+                    adapter = new SaveNotificationAdapter(SaveNotificationActivity.this, arr, multiselect_list, appName, appIcon);
                     notification_recycler.setAdapter(adapter);
                 } else {
                     adapter.notifyDataSetChanged();

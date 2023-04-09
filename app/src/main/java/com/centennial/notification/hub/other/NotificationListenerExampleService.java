@@ -14,12 +14,10 @@ import android.graphics.drawable.VectorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -49,20 +47,6 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (currentLocation != null) {
-                latitude = currentLocation.getLatitude();
-                longitude = currentLocation.getLongitude();
-            }
-        }
-        return START_STICKY;
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         locationManager.removeUpdates(this);
@@ -79,8 +63,18 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         // Get the current location using location manager.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            // Check if GPS is enable or not.
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                // Request location from GPS
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            } else {
+                // Request location from Network
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                currentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+
             if (currentLocation != null) {
                 latitude = currentLocation.getLatitude();
                 longitude = currentLocation.getLongitude();
@@ -223,6 +217,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
+        // Remove the location update after getting the current location to save battery.
+        locationManager.removeUpdates(this);
+
+        // Update the vales with new location.
         currentLocation = location;
         latitude = location.getLatitude();
         longitude = location.getLongitude();
@@ -230,16 +228,13 @@ public class NotificationListenerExampleService extends NotificationListenerServ
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        LocationListener.super.onStatusChanged(provider, status, extras);
     }
 
     @Override
     public void onProviderEnabled(@NonNull String provider) {
-        LocationListener.super.onProviderEnabled(provider);
     }
 
     @Override
     public void onProviderDisabled(@NonNull String provider) {
-        LocationListener.super.onProviderDisabled(provider);
     }
 }

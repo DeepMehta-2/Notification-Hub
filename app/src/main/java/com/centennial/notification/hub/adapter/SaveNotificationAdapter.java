@@ -3,7 +3,6 @@ package com.centennial.notification.hub.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +31,15 @@ public class SaveNotificationAdapter extends RecyclerView.Adapter<SaveNotificati
     public ArrayList<SaveNotificationData> arrayList;
     public ArrayList<SaveNotificationData> selected_List = new ArrayList<>();
 
-    public SaveNotificationAdapter(Context context, ArrayList<SaveNotificationData> arrayList, ArrayList<SaveNotificationData> selected_List) {
+    String appName;
+    byte[] appIcon;
+
+    public SaveNotificationAdapter(Context context, ArrayList<SaveNotificationData> arrayList, ArrayList<SaveNotificationData> selected_List, String appName, byte[] appIcon) {
         this.context = context;
         this.arrayList = arrayList;
         this.selected_List = selected_List;
+        this.appName = appName;
+        this.appIcon = appIcon;
     }
 
     @Override
@@ -59,8 +63,8 @@ public class SaveNotificationAdapter extends RecyclerView.Adapter<SaveNotificati
 
         holder.title.setText(arrayList.get(position).getTitle());
 
-        Log.e("test latitude", String.valueOf(arrayList.get(position).getLatitude()));
-        Log.e("test longitude", String.valueOf(arrayList.get(position).getLongitude()));
+//        Log.e("test latitude", String.valueOf(arrayList.get(position).getLatitude()));
+//        Log.e("test longitude", String.valueOf(arrayList.get(position).getLongitude()));
 
         if (data.getMessage() != null && !data.getMessage().isEmpty()) {
             holder.message.setVisibility(View.VISIBLE);
@@ -151,6 +155,8 @@ public class SaveNotificationAdapter extends RecyclerView.Adapter<SaveNotificati
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra("appName", appName);
+                    intent.putExtra("appIcon", appIcon);
                     intent.putExtra("latitude", arrayList.get(getAdapterPosition()).getLatitude());
                     intent.putExtra("longitude", arrayList.get(getAdapterPosition()).getLongitude());
                     context.startActivity(intent);

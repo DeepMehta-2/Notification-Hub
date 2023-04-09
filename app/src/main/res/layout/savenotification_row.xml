@@ -41,6 +41,13 @@
                 android:textColor="@color/black_text"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/mapLocation"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/ic_location"
+                app:tint="@color/colorAccent" />
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -60,14 +67,6 @@
                     android:visibility="gone" />
 
             </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/mapLocation"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/ic_settings"
-                app:tint="@color/colorAccent" />
 
         </LinearLayout>
 
