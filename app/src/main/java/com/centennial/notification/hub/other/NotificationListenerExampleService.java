@@ -1,7 +1,7 @@
 package com.centennial.notification.hub.other;
 
+import android.Manifest;
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -11,6 +11,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.VectorDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -18,17 +21,52 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import com.centennial.notification.hub.model.SaveNotificationData;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
 import com.centennial.notification.hub.Utils.Common;
 import com.centennial.notification.hub.model.AppCategory;
+import com.centennial.notification.hub.model.SaveNotificationData;
 
-public class NotificationListenerExampleService extends NotificationListenerService {
+public class NotificationListenerExampleService extends NotificationListenerService implements LocationListener {
 
     byte[] AppIcon;
     byte[] SmallIcon = null;
     byte[] LargeIcon = null;
     byte[] BigImage = null;
     String title, message, TickerText, BigText;
+
+    private LocationManager locationManager;
+    private Location currentLocation;
+
+    double latitude = 0;
+    double longitude = 0;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (currentLocation != null) {
+                latitude = currentLocation.getLatitude();
+                longitude = currentLocation.getLongitude();
+            }
+        }
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        locationManager.removeUpdates(this);
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -38,7 +76,16 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
 
-//        for (StatusBarNotification sbm : this.getActiveNotifications()) {
+        // Get the current location using location manager.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (currentLocation != null) {
+                latitude = currentLocation.getLatitude();
+                longitude = currentLocation.getLongitude();
+            }
+        }
 
         // Get data from installed application using package name.
         String package_name = sbn.getPackageName();
@@ -60,18 +107,11 @@ public class NotificationListenerExampleService extends NotificationListenerServ
         }
         final String applicationName = (String) (ai != null ? pm.getApplicationLabel(ai) : "(unknown)");
 
-
         // Get data of notifications.
         Bundle extras = sbn.getNotification().extras;
         title = extras.getString("android.title");
         message = extras.getString("android.text");
 
-        if (sbn.getNotification().contentIntent != null) {
-            PendingIntent pendingIntent = sbn.getNotification().contentIntent;
-        }
-        if (sbn.getNotification().actions != null) {
-            Notification.Action[] actions = sbn.getNotification().actions;
-        }
         if (sbn.getNotification().tickerText != null) {
             TickerText = sbn.getNotification().tickerText.toString();
         }
@@ -87,7 +127,7 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             } catch (Exception e) {
                 e.printStackTrace();
                 SmallIcon = AppIcon;
-                Log.e("catch small icon", "" + e.toString());
+//                Log.e("catch small icon", "" + e.toString());
             }
         }
         if (extras.containsKey(Notification.EXTRA_LARGE_ICON) && extras.get(Notification.EXTRA_LARGE_ICON) != null) {
@@ -95,12 +135,10 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                 Bitmap bmp = (Bitmap) extras.get(Notification.EXTRA_LARGE_ICON);
                 LargeIcon = Common.getBytesFromBitmap(bmp);
             } catch (ClassCastException e) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Icon bmp = (Icon) extras.get(Notification.EXTRA_LARGE_ICON);
-                    Drawable drawable = bmp.loadDrawable(this);
-                    LargeIcon = Common.getBytes(drawable);
-                }
-                Log.e("catch large icon", "" + e.toString());
+                Icon bmp = (Icon) extras.get(Notification.EXTRA_LARGE_ICON);
+                Drawable drawable = bmp.loadDrawable(this);
+                LargeIcon = Common.getBytes(drawable);
+//                Log.e("catch large icon", "" + e.toString());
             }
         }
         if (extras.containsKey(Notification.EXTRA_BIG_TEXT) && extras.get(Notification.EXTRA_BIG_TEXT) != null) {
@@ -142,6 +180,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                     data.setSmall_icon(SmallIcon);
                     data.setLarge_icon(LargeIcon);
                     data.setDate(sbn.getPostTime());
+                    data.setLatitude(latitude);
+                    data.setLongitude(longitude);
                     Long i = db.insertSaveNotification(data);
                 }
             }
@@ -158,6 +198,8 @@ public class NotificationListenerExampleService extends NotificationListenerServ
                     data.setSmall_icon(SmallIcon);
                     data.setLarge_icon(LargeIcon);
                     data.setDate(sbn.getPostTime());
+                    data.setLatitude(latitude);
+                    data.setLongitude(longitude);
                     Long i = db.insertSaveNotification(data);
                 }
         }
@@ -179,4 +221,25 @@ public class NotificationListenerExampleService extends NotificationListenerServ
     public void onNotificationRemoved(StatusBarNotification sbn) {
     }
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        currentLocation = location;
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        LocationListener.super.onStatusChanged(provider, status, extras);
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+        LocationListener.super.onProviderEnabled(provider);
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+        LocationListener.super.onProviderDisabled(provider);
+    }
 }

@@ -1,26 +1,30 @@
 package com.centennial.notification.hub.activity;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.centennial.notification.hub.R;
 import com.centennial.notification.hub.adapter.ViewPagerAdapter;
 import com.centennial.notification.hub.model.GroupDataClass;
 import com.centennial.notification.hub.other.MySQLiteHelper;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -31,7 +35,10 @@ public class MainActivity extends AppCompatActivity {
     public static ViewPagerAdapter pagerAdapter;
     private MySQLiteHelper helper;
     private Toolbar toolbar;
+    private ViewPager viewPager;
+    private final int REQUEST_LOCATION_PERMISSION = 1;
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +46,14 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ViewPager viewPager = findViewById(R.id.viewpager);
+        // Check if location permission is granted or not.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Request the location permission
+            requestLocationPermission();
+        }
+
+        viewPager = findViewById(R.id.viewpager);
         TabLayout tabLayout = findViewById(R.id.tabview);
 
         helper = new MySQLiteHelper(this);
@@ -76,6 +90,37 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+            } else {
+                // Request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                        REQUEST_LOCATION_PERMISSION);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted
+            } else {
+                // Permission has been denied
+                Snackbar.make(viewPager, "Give location permission to use Map functions.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.setting_menu, menu);
@@ -89,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
             return true;
         } else if (item.getItemId() == R.id.testingNotification) {
-            sendNotification("Testing Notification","This is a demo notification for testing purpose");
+            sendNotification("Testing Notification", "This is a demo notification for testing purpose");
         }
         return super.onContextItemSelected(item);
     }

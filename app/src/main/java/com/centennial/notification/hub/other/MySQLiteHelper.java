@@ -45,6 +45,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_SMALL_ICON = "small_icon";
     public static final String KEY_LARGE_ICON = "large_icon";
     private static final String KEY_DATE = "date";
+    private static final String KEY_LATITUDE = "latitude";
+    private static final String KEY_LONGITUDE = "longitude";
 
     // column names (Groups)
     private static final String KEY_GROUP_ID = "group_id";
@@ -69,10 +71,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 + KEY_APP_PKGNAME + " TEXT," + KEY_APP_IMG + " BLOB, " + KEY_APP_IS_SAVE + " INTEGER NOT NULL DEFAULT 1, "
                 + KEY_CATE_DATE + " LONG NOT NULL DEFAULT 0 )";
 
-        String SAVE_NOTIFICATIO_TABLE = "CREATE TABLE " + TABLE_SAVE_NOTIFICATION +
+        String SAVE_NOTIFICATION_TABLE = "CREATE TABLE " + TABLE_SAVE_NOTIFICATION +
                 "( " + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_CATE_ID + " INTEGER," + KEY_TITLE + " TEXT,"
                 + KEY_MESSAGE + " TEXT," + KEY_BIG_TEXT + " TEXT," + KEY_TICKER_TEXT + " TEXT,"
-                + KEY_BIG_IMAGE + " BLOB," + KEY_SMALL_ICON + " BLOB," + KEY_LARGE_ICON + " BLOB," + KEY_DATE + " LONG )";
+                + KEY_BIG_IMAGE + " BLOB," + KEY_SMALL_ICON + " BLOB," + KEY_LARGE_ICON + " BLOB,"
+                + KEY_LATITUDE + " REAL," + KEY_LONGITUDE + " REAL," + KEY_DATE + " LONG )";
 
         String CREATE_GROUP = "CREATE TABLE " + TABLE_GROUP +
                 "( " + KEY_GROUP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_GROUP_NAME + " TEXT ,"
@@ -81,7 +84,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // create table
         db.execSQL(CREATE_CATEGORY_TABLE);
-        db.execSQL(SAVE_NOTIFICATIO_TABLE);
+        db.execSQL(SAVE_NOTIFICATION_TABLE);
         db.execSQL(CREATE_GROUP);
     }
 
@@ -131,6 +134,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             values.put(KEY_BIG_IMAGE, notificationData.getBig_image());
             values.put(KEY_SMALL_ICON, notificationData.getSmall_icon());
             values.put(KEY_LARGE_ICON, notificationData.getLarge_icon());
+            values.put(KEY_LATITUDE, notificationData.getLatitude());
+            values.put(KEY_LONGITUDE, notificationData.getLongitude());
             values.put(KEY_DATE, notificationData.getDate());
 
             long id = db.insert(TABLE_SAVE_NOTIFICATION, // table
@@ -194,7 +199,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 db.query(TABLE_SAVE_NOTIFICATION, // a. table
                         new String[]{KEY_ID, KEY_CATE_ID, KEY_TITLE, KEY_MESSAGE,
                                 KEY_BIG_TEXT, KEY_TICKER_TEXT,
-                                KEY_BIG_IMAGE, KEY_SMALL_ICON, KEY_LARGE_ICON, KEY_DATE}, // b. column names
+                                KEY_BIG_IMAGE, KEY_SMALL_ICON, KEY_LARGE_ICON, KEY_LATITUDE, KEY_LONGITUDE, KEY_DATE}, // b. column names
                         KEY_CATE_ID + " = ?", // c. selections
                         new String[]{String.valueOf(cate_id)}, // d. selections args
                         null, // e. group by
@@ -215,7 +220,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 data.setBig_image(cursor.getBlob(6));
                 data.setSmall_icon(cursor.getBlob(7));
                 data.setLarge_icon(cursor.getBlob(8));
-                data.setDate(Long.parseLong(cursor.getString(9)));
+                data.setLatitude(Double.parseDouble(cursor.getString(9)));
+                data.setLongitude(Double.parseDouble(cursor.getString(10)));
+                data.setDate(Long.parseLong(cursor.getString(11)));
 
                 // Add category to categories.
                 saveNotificationData.add(data);
@@ -239,7 +246,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 db.query(TABLE_SAVE_NOTIFICATION, // a. table
                         new String[]{KEY_ID, KEY_CATE_ID, KEY_TITLE, KEY_MESSAGE,
                                 KEY_BIG_TEXT, KEY_TICKER_TEXT,
-                                KEY_BIG_IMAGE, KEY_SMALL_ICON, KEY_LARGE_ICON, KEY_DATE}, // b. column names
+                                KEY_BIG_IMAGE, KEY_SMALL_ICON, KEY_LARGE_ICON, KEY_LATITUDE, KEY_LONGITUDE, KEY_DATE}, // b. column names
                         KEY_CATE_ID + " = ?", // c. selections
                         new String[]{String.valueOf(cate_id)}, // d. selections args
                         null, // e. group by
@@ -261,7 +268,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 data.setBig_image(cursor.getBlob(6));
                 data.setSmall_icon(cursor.getBlob(7));
                 data.setLarge_icon(cursor.getBlob(8));
-                data.setDate(Long.parseLong(cursor.getString(9)));
+                data.setLatitude(Double.parseDouble(cursor.getString(9)));
+                data.setLongitude(Double.parseDouble(cursor.getString(10)));
+                data.setDate(Long.parseLong(cursor.getString(11)));
 
                 // Add category to categories.
                 saveNotificationData.add(data);

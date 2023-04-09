@@ -16,20 +16,11 @@ public class SaveNotificationData implements Parcelable {
     private byte[] large_icon;
     private Long date;
 
-    public SaveNotificationData() {
-    }
+    private double latitude;
+    private double longitude;
 
-    public SaveNotificationData(int id, int categoryID, String title, String message, String big_text, String ticker_text, byte[] big_image, byte[] small_icon, byte[] large_icon, Long date) {
-        this.id = id;
-        this.categoryID = categoryID;
-        this.title = title;
-        this.message = message;
-        this.big_text = big_text;
-        this.ticker_text = ticker_text;
-        this.big_image = big_image;
-        this.small_icon = small_icon;
-        this.large_icon = large_icon;
-        this.date = date;
+
+    public SaveNotificationData() {
     }
 
     protected SaveNotificationData(Parcel in) {
@@ -42,6 +33,8 @@ public class SaveNotificationData implements Parcelable {
         big_image = in.createByteArray();
         small_icon = in.createByteArray();
         large_icon = in.createByteArray();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
         if (in.readByte() == 0) {
             date = null;
         } else {
@@ -141,6 +134,22 @@ public class SaveNotificationData implements Parcelable {
         this.date = date;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -157,6 +166,8 @@ public class SaveNotificationData implements Parcelable {
         dest.writeByteArray(big_image);
         dest.writeByteArray(small_icon);
         dest.writeByteArray(large_icon);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
         if (date == null) {
             dest.writeByte((byte) 0);
         } else {

@@ -51,7 +51,7 @@
                     android:layout_height="24dp"
                     android:layout_margin="5dp"
                     android:src="@drawable/delete_icon"
-                    android:tint="@color/colorAccent" />
+                    app:tint="@color/colorAccent" />
 
                 <CheckBox
                     android:id="@+id/checkbox"
@@ -60,6 +60,14 @@
                     android:visibility="gone" />
 
             </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/mapLocation"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/colorAccent" />
 
         </LinearLayout>
 

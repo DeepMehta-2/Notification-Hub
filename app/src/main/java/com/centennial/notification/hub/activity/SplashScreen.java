@@ -58,7 +58,7 @@ public class SplashScreen extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-// Get installed app list
+            // Get installed app list
             arrayList = GetInstalledAppList.getAppList(SplashScreen.this);
 
             boolean isAppLaunchedFirstTime = preferences.getBoolean("isAppLaunchedFirstTime", true);
@@ -77,8 +77,6 @@ public class SplashScreen extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
-// If the user did not turn the notification listener service on we prompt him to do so
                     if (!isNotificationServiceEnabled()) {
                         Intent intent = new Intent(SplashScreen.this, PermissionActivity.class);
                         startActivity(intent);
@@ -107,8 +105,8 @@ public class SplashScreen extends AppCompatActivity {
         final String flat = Settings.Secure.getString(getContentResolver(), ENABLED_NOTIFICATION_LISTENERS);
         if (!TextUtils.isEmpty(flat)) {
             final String[] names = flat.split(":");
-            for (int i = 0; i < names.length; i++) {
-                final ComponentName cn = ComponentName.unflattenFromString(names[i]);
+            for (String name : names) {
+                final ComponentName cn = ComponentName.unflattenFromString(name);
                 if (cn != null) {
                     if (TextUtils.equals(pkgName, cn.getPackageName())) {
                         return true;
@@ -151,18 +149,16 @@ public class SplashScreen extends AppCompatActivity {
             dataClass.setGroup_App_Name(i.getAppName());
             dataClass.setGroup_Pkg_Name(i.getPackageName());
 
-            if (CheckPackageName.equals("com.whatsapp")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.bsb.hike")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.facebook.mlite")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.facebook.orca")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.skype.raider")) {
-                dataClass.setIs_inGroup(1);
-            } else {
-                dataClass.setIs_inGroup(0);
+            switch (CheckPackageName) {
+                case "com.whatsapp":
+                case "com.facebook.mlite":
+                case "com.facebook.orca":
+                case "com.skype.raider":
+                    dataClass.setIs_inGroup(1);
+                    break;
+                default:
+                    dataClass.setIs_inGroup(0);
+                    break;
             }
 
             helper.createGroup(dataClass);
@@ -178,20 +174,18 @@ public class SplashScreen extends AppCompatActivity {
             dataClass.setGroup_App_Name(i.getAppName());
             dataClass.setGroup_Pkg_Name(i.getPackageName());
 
-            if (CheckPackageName.equals("com.facebook.katana")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.facebook.lite")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.snapchat.android")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.instagram.android")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.twitter.android")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.linkedin.android")) {
-                dataClass.setIs_inGroup(1);
-            } else {
-                dataClass.setIs_inGroup(0);
+            switch (CheckPackageName) {
+                case "com.facebook.katana":
+                case "com.facebook.lite":
+                case "com.snapchat.android":
+                case "com.instagram.android":
+                case "com.twitter.android":
+                case "com.linkedin.android":
+                    dataClass.setIs_inGroup(1);
+                    break;
+                default:
+                    dataClass.setIs_inGroup(0);
+                    break;
             }
 
             helper.createGroup(dataClass);
@@ -207,24 +201,20 @@ public class SplashScreen extends AppCompatActivity {
             dataClass.setGroup_App_Name(i.getAppName());
             dataClass.setGroup_Pkg_Name(i.getPackageName());
 
-            if (CheckPackageName.equals("net.one97.paytm")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.samsung.android.spay")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.paypal.android.p2pmobile")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.phonepe.app")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("in.org.npci.upiapp")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.google.android.apps.nbu.paisa.user")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.mobikwik_new")) {
-                dataClass.setIs_inGroup(1);
-            } else if (CheckPackageName.equals("com.freecharge.android")) {
-                dataClass.setIs_inGroup(1);
-            } else {
-                dataClass.setIs_inGroup(0);
+            switch (CheckPackageName) {
+                case "net.one97.paytm":
+                case "com.freecharge.android":
+                case "com.samsung.android.spay":
+                case "com.paypal.android.p2pmobile":
+                case "com.phonepe.app":
+                case "com.google.android.apps.nbu.paisa.user":
+                case "com.google.android.apps.walletnfcrel":
+                case "com.mobikwik_new":
+                    dataClass.setIs_inGroup(1);
+                    break;
+                default:
+                    dataClass.setIs_inGroup(0);
+                    break;
             }
 
             helper.createGroup(dataClass);

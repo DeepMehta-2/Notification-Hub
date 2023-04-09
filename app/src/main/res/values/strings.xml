@@ -8,5 +8,6 @@
     <string name="notification_listener_service_explanation">Application require permission to enable the Notification Listener Service to work, Enable it now..!!</string>
     <string name="settings">Settings</string>
     <string name="testingNotification">Testing Notification</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>
