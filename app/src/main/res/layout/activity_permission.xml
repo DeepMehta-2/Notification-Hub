@@ -27,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="350dp"
         android:text="@string/notification_listener_service"
-        android:textColor="#FFAA33"
+        android:textColor="#F4C105"
         android:textSize="28dp"
         android:textStyle="bold" />
 

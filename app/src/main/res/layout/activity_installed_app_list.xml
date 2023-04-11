@@ -5,21 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="@dimen/_12dp"
     tools:context="com.centennial.notification.hub.activity.InstalledAppList">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        app:contentPadding="7dp">
+        style="@style/cardStyle">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/installedAppRV"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            style="@style/viewMatchParentStyle" />
 
     </androidx.cardview.widget.CardView>
 

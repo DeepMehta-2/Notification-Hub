@@ -10,13 +10,6 @@
         <item name="android:actionModeBackground">@color/colorPrimary</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/bg_img</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -26,6 +19,18 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Tab Layout Style -->
+    <style name="tabLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabIndicatorColor">@color/colorAccent</item>
+        <item name="tabMode">scrollable</item>
+        <item name="tabSelectedTextColor">@color/white_text</item>
+        <item name="tabTextColor">@color/white_text</item>
+    </style>
 
     <!--Create style for progressDialog-->
     <style name="CustomProgressBar" parent="android:Theme.Holo.Dialog">
@@ -62,4 +67,19 @@
         <item name="android:paddingBottom">20dp</item>
         <item name="android:textSize">17sp</item>
     </style>
+
+    <style name="viewMatchParentStyle">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="cardStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cardCornerRadius">@dimen/_5dp</item>
+        <item name="cardElevation">@dimen/_2dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="contentPadding">@dimen/_7dp</item>
+    </style>
+
 </resources>

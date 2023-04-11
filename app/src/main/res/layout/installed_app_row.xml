@@ -10,14 +10,13 @@
         android:layout_width="24dp"
         android:layout_height="24dp" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/installed_appName_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
         android:checked="false"
-        android:gravity="left"
-        android:text="App Name"
+        android:text="@string/application_names"
         android:textSize="15dp" />
 
 </LinearLayout>

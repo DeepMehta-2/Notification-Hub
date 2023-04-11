@@ -31,8 +31,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/app_title"
         android:layout_centerHorizontal="true"
+        android:layout_marginStart="55dp"
         android:layout_marginTop="15dp"
-        android:text="@string/get_organized_with_all_notifications_in_one_app"
+        android:layout_marginEnd="55dp"
+        android:gravity="center"
+        android:text="@string/tag_line"
         android:textColor="#ffffff"
         android:textSize="18sp" />
 </RelativeLayout>

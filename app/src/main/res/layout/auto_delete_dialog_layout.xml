@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="7 Days"
+            android:text="@string/_7_days"
             android:textSize="18dp" />
 
         <RadioButton
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="15 Days"
+            android:text="@string/_15_days"
             android:textSize="18dp" />
 
         <RadioButton
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="30 Days"
+            android:text="@string/_30_days"
             android:textSize="18dp" />
 
         <RadioButton
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="Never"
+            android:text="@string/never"
             android:textSize="18dp" />
 
     </RadioGroup>
