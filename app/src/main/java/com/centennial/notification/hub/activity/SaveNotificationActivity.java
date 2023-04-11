@@ -35,7 +35,7 @@ public class SaveNotificationActivity extends AppCompatActivity {
     private int categoryID;
     private TextView NoData;
     private RecyclerView notification_recycler;
-    private int CurrentPage = 1, CurrentPageAdvertise = 1, pagesize = 25, visibleThreshold = 5;
+    private int CurrentPage = 1, pagesize = 25, visibleThreshold = 5;
     private SaveNotificationAdapter adapter;
     ArrayList<SaveNotificationData> arr = new ArrayList<>();
     Long DataCount = Long.valueOf(0);

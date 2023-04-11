@@ -82,17 +82,6 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white_text" />
 
-                <Button
-                    android:id="@+id/readMore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="33dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_background"
-                    android:clickable="false"
-                    android:text="Read more"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white_text" />
             </LinearLayout>
         </LinearLayout>
 

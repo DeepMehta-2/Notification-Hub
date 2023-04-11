@@ -183,12 +183,12 @@ public class SettingsActivity extends AppCompatActivity {
         alert.setView(v);
 
         TextView title = v.findViewById(R.id.dialog_title);
-        title.setText("Delete saved notification?");
+        title.setText(R.string.delete_save_notification);
         TextView heading = v.findViewById(R.id.dialog_heading);
-        heading.setText("All saved notifications will be deleted");
+        heading.setText(R.string.delete_all_notification);
 
         Button delete = v.findViewById(R.id.dialog_confirm_btn);
-        delete.setText("Delete");
+        delete.setText(R.string.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

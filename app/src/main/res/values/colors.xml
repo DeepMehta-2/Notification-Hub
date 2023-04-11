@@ -2,15 +2,12 @@
 <resources>
     <color name="colorPrimary">#2988EC</color>
     <color name="colorPrimaryDark">#106BCA</color>
-    <color name="colorAccent">#ff7a00</color>
+    <color name="colorAccent">#FF9800</color>
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
 
     <color name="transparent">#00000000</color>
-
-    <color name="blue_start_header">#2988EC</color>
-    <color name="blue_end_header">#2988EC</color>
 
     <color name="btn_start_color">#ed8f03</color>
     <color name="btn_end_color">#8F027A</color>

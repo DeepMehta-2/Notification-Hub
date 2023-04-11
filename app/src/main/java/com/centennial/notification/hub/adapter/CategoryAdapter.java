@@ -61,11 +61,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         holder.innerRecyclerView.setLayoutManager(new LinearLayoutManager(c));
         holder.innerRecyclerView.setAdapter(new InnerListAdapter(c, arrayList.get(position).getDataArrayList(), this, position));
 
-        if (arrayList.get(position).getDataArrayList().size() > 5) {
-            holder.readMore.setVisibility(View.VISIBLE);
-        } else {
-            holder.readMore.setVisibility(View.GONE);
-        }
 
         // For multi select row in recycler view
         if (MainFragmentLayout.isMultiSelect) {
@@ -97,7 +92,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         i.putExtra("categoryID", arrayList.get(position).getCategoryID());
         i.putExtra("appName", arrayList.get(position).getAppName());
         i.putExtra("appIcon", arrayList.get(position).getAppImg());
-//        i.putParcelableArrayListExtra("data", arrayList.get(position).getDataArrayList());
         c.startActivity(i);
     }
 
@@ -107,7 +101,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
         TextView app_Name;
         RecyclerView innerRecyclerView;
         CardView mainCardLayout;
-        Button btnDeleteCategory, readMore;
+        Button btnDeleteCategory;
         CheckBox checkbox;
 
         public MyViewHolder(View itemView) {
@@ -116,7 +110,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
             app_img = itemView.findViewById(R.id.app_img);
             app_Name = itemView.findViewById(R.id.app_name);
             checkbox = itemView.findViewById(R.id.checkbox);
-            readMore = itemView.findViewById(R.id.readMore);
             innerRecyclerView = itemView.findViewById(R.id.innerRecyclerView);
             mainCardLayout = itemView.findViewById(R.id.mainCardLayout);
             btnDeleteCategory = itemView.findViewById(R.id.btnDeleteCategory);
@@ -128,7 +121,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
                     i.putExtra("categoryID", arrayList.get(getAdapterPosition()).getCategoryID());
                     i.putExtra("appName", arrayList.get(getAdapterPosition()).getAppName());
                     i.putExtra("appIcon", arrayList.get(getAdapterPosition()).getAppImg());
-//                    i.putParcelableArrayListExtra("data", arrayList.get(getAdapterPosition()).getDataArrayList());
                     c.startActivity(i);
                 }
             });

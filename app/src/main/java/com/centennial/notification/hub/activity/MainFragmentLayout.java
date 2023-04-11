@@ -41,7 +41,7 @@ public class MainFragmentLayout extends Fragment {
     ArrayList<AppCategory> arrayList = new ArrayList<>();
     CategoryAdapter adapter;
     LinearLayoutManager linearLayoutManager;
-    private int CurrentPage = 1, CurrentPageAdvertise = 1, pagesize = 8, visibleThreshold = 3;
+    private int CurrentPage = 1, pagesize = 8, visibleThreshold = 3;
 
     // For multi select row in recycler view
     public static ActionMode mActionMode;
@@ -94,8 +94,6 @@ public class MainFragmentLayout extends Fragment {
             public void onItemClick(View view, int position) {
                 if (isMultiSelect) {
                     multi_select(position);
-                } else {
-//                    Toast.makeText(getApplicationContext(), "Details Page", Toast.LENGTH_SHORT).show();
                 }
             }
 

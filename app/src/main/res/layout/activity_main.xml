@@ -17,7 +17,7 @@
         android:id="@+id/tabview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/tabview_gradiant"
+        android:background="@color/colorPrimary"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/colorAccent"
         app:tabMode="scrollable"

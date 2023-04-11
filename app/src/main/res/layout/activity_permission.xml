@@ -10,26 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/splash_screen" />
+        android:src="@drawable/bg_img" />
 
     <ImageView
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="false"
         android:layout_marginTop="100dp"
-        android:layout_centerHorizontal="true"
         android:src="@drawable/permission" />
 
     <TextView
         android:id="@+id/description_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
         android:text="@string/notification_listener_service"
         android:textColor="#FFAA33"
         android:textSize="28dp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp"/>
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,27 +42,17 @@
             android:id="@+id/description"
             android:layout_width="322dp"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
             android:text="@string/notification_listener_service_explanation"
             android:textColor="#ffffff"
-            android:textSize="18dp"
-            android:layout_centerHorizontal="true"
-            android:gravity="center" />
+            android:textSize="18dp" />
 
     </RelativeLayout>
 
     <Button
         android:id="@+id/permission_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="40dp"
-        android:background="@drawable/permission_btn_bg"
-        android:elevation="4dp"
-        android:gravity="center"
-        android:paddingBottom="24dp"
-        android:paddingTop="20dp"
-        android:text="GIVE PERMISSION"
-        android:textSize="17dp" />
+        style="@style/PermissionBtnStyle"
+        android:text="@string/give_permission" />
 
 </RelativeLayout>
