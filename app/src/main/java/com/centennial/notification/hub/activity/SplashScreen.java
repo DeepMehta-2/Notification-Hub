@@ -48,6 +48,7 @@ public class SplashScreen extends AppCompatActivity {
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.HOUR_OF_DAY, 1);
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent); // Repeat every 24 hours
+//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent); // Repeat every 1 minute for testing
         }
 
         new BackGroundWork().execute();

@@ -3,7 +3,6 @@ package com.centennial.notification.hub.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,11 +14,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.centennial.notification.hub.other.MySQLiteHelper;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.centennial.notification.hub.R;
 import com.centennial.notification.hub.Utils.GetInstalledAppList;
 import com.centennial.notification.hub.model.GroupDataClass;
 import com.centennial.notification.hub.model.InstalledAppDataClass;
+import com.centennial.notification.hub.other.MySQLiteHelper;
 
 import java.util.ArrayList;
 
@@ -129,15 +130,18 @@ public class SettingsActivity extends AppCompatActivity {
         alert.setView(v);
         alert.setTitle("Select Time Interval");
         RadioGroup rg = v.findViewById(R.id.radio_group);
+        final RadioButton rb_testing = v.findViewById(R.id.rb_testing);
         final RadioButton rb0 = v.findViewById(R.id.rb0);
         final RadioButton rb1 = v.findViewById(R.id.rb1);
         final RadioButton rb2 = v.findViewById(R.id.rb2);
         final RadioButton rb3 = v.findViewById(R.id.rb3);
 
         if (strDeleteInterval != null) {
-            if (strDeleteInterval.equals("7 Days")) {
+            if (strDeleteInterval.equals("1 Minute")) {
+                rb_testing.setChecked(true);
+            } else if (strDeleteInterval.equals("7 Days")) {
                 rb0.setChecked(true);
-            }else if (strDeleteInterval.equals("15 Days")) {
+            } else if (strDeleteInterval.equals("15 Days")) {
                 rb1.setChecked(true);
             } else if (strDeleteInterval.equals("30 Days")) {
                 rb2.setChecked(true);
@@ -158,9 +162,11 @@ public class SettingsActivity extends AppCompatActivity {
 
                 textView.setText(strDeleteInterval);
 
-                if (strDeleteInterval.equals("7 Days")) {
+                if (strDeleteInterval.equals("1 Minute")) {
+                    rb_testing.setChecked(true);
+                } else if (strDeleteInterval.equals("7 Days")) {
                     rb0.setChecked(true);
-                } if (strDeleteInterval.equals("15 Days")) {
+                } else if (strDeleteInterval.equals("15 Days")) {
                     rb1.setChecked(true);
                 } else if (strDeleteInterval.equals("30 Days")) {
                     rb2.setChecked(true);

@@ -1,12 +1,13 @@
 package com.centennial.notification.hub.adapter;
 
 import android.content.Context;
+
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import com.centennial.notification.hub.other.MySQLiteHelper;
 import com.centennial.notification.hub.R;
@@ -63,7 +64,7 @@ public class Is_SaveNotificationAdapter extends RecyclerView.Adapter<Is_SaveNoti
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        Switch appName_Switch;
+        SwitchCompat appName_Switch;
         ImageView appIcon;
 
         public MyViewHolder(View itemView) {

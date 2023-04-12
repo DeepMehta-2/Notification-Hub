@@ -22,6 +22,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             MySQLiteHelper helper = new MySQLiteHelper(context);
             Calendar cal = Calendar.getInstance();
             switch (deleteInterval) {
+                case "1 Minute":
+                    cal.add(Calendar.MINUTE, -1);
+                    helper.DeleteData(cal.getTimeInMillis());
+                    break;
                 case "7 Days":
                     cal.add(Calendar.DATE, -7);
                     helper.DeleteData(cal.getTimeInMillis());
